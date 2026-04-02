@@ -39,7 +39,7 @@ const RecordSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-// Compound index for faster dashboard queries
+//Compound index for faster dashboard queries
 RecordSchema.index({ type: 1, date: -1 });
 RecordSchema.index({ isDeleted: 1, date: -1 });
 RecordSchema.index({ category: 1, isDeleted: 1 });

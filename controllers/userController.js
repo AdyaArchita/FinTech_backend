@@ -2,8 +2,7 @@ const User = require('../models/User');
 const bcrypt = require('bcryptjs');
 const { z } = require('zod');
 
-// ─── Validation Schemas ───────────────────────────────────────────────────────
-
+//Validation Schemas
 const updateRoleSchema = z.object({
   role: z.enum(['Admin', 'Analyst', 'Viewer']),
 });
@@ -19,8 +18,7 @@ const updateUserSchema = z.object({
   message: 'At least one field must be provided',
 });
 
-// ─── Get All Users (Admin only) ───────────────────────────────────────────────
-
+//Get All Users(Admin only)
 exports.getAllUsers = async (req, res, next) => {
   try {
     const { role, status, page = 1, limit = 10 } = req.query;
@@ -47,8 +45,7 @@ exports.getAllUsers = async (req, res, next) => {
   }
 };
 
-// ─── Get Single User (Admin only) ────────────────────────────────────────────
-
+//Get Single User(Admin only)
 exports.getUserById = async (req, res, next) => {
   try {
     const user = await User.findById(req.params.id).select('-password');
@@ -59,8 +56,7 @@ exports.getUserById = async (req, res, next) => {
   }
 };
 
-// ─── Update User Role (Admin only) ───────────────────────────────────────────
-
+//Update User Role(Admin only)
 exports.updateUserRole = async (req, res, next) => {
   try {
     const parsed = updateRoleSchema.safeParse(req.body);
@@ -71,7 +67,7 @@ exports.updateUserRole = async (req, res, next) => {
       });
     }
 
-    // Prevent admin from changing their own role
+    //Prevent role-change of admin on their own
     if (req.params.id === req.user.id) {
       return res.status(400).json({ message: 'You cannot change your own role' });
     }
@@ -90,8 +86,7 @@ exports.updateUserRole = async (req, res, next) => {
   }
 };
 
-// ─── Update User Status (Admin only) ─────────────────────────────────────────
-
+//Update User Status(Admin only)
 exports.updateUserStatus = async (req, res, next) => {
   try {
     const parsed = updateStatusSchema.safeParse(req.body);
@@ -120,8 +115,7 @@ exports.updateUserStatus = async (req, res, next) => {
   }
 };
 
-// ─── Delete User (Admin only) ─────────────────────────────────────────────────
-
+//Delete User(Admin only)
 exports.deleteUser = async (req, res, next) => {
   try {
     if (req.params.id === req.user.id) {

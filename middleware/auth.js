@@ -1,8 +1,6 @@
 const jwt = require('jsonwebtoken');
 
-/**
- * authenticate — verifies the JWT and attaches decoded user to req.user
- */
+//authenticate — verifies the JWT and attaches decoded user to req.user
 const authenticate = (req, res, next) => {
   const authHeader = req.headers['authorization'];
   const token = authHeader?.startsWith('Bearer ') ? authHeader.split(' ')[1] : null;
@@ -13,7 +11,7 @@ const authenticate = (req, res, next) => {
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    req.user = decoded; // { id, role, iat, exp }
+    req.user = decoded; //{id, role, iat, exp}
     next();
   } catch (err) {
     if (err.name === 'TokenExpiredError') {
@@ -23,10 +21,7 @@ const authenticate = (req, res, next) => {
   }
 };
 
-/**
- * authorize — restricts access to users whose role is in the allowed list
- * Usage: authorize(['Admin', 'Analyst'])
- */
+//authorize —restricts access to users whose role is in the allowed list ; Usage: authorize(['Admin', 'Analyst'])
 const authorize = (roles = []) => {
   return (req, res, next) => {
     if (!req.user) {

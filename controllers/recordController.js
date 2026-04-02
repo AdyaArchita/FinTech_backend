@@ -1,8 +1,7 @@
 const Record = require('../models/Record');
 const { z } = require('zod');
 
-// ─── Validation Schemas ───────────────────────────────────────────────────────
-
+// Validation Schemas
 const recordSchema = z.object({
   amount: z.number({ required_error: 'Amount is required' }).positive('Amount must be positive'),
   type: z.enum(['Income', 'Expense'], { required_error: 'Type must be Income or Expense' }),
@@ -16,8 +15,7 @@ const updateRecordSchema = recordSchema.partial().refine(
   { message: 'At least one field must be provided to update' }
 );
 
-// ─── Create Record (Admin only) ───────────────────────────────────────────────
-
+//Create Record(Admin only)
 exports.createRecord = async (req, res, next) => {
   try {
     const parsed = recordSchema.safeParse(req.body);
@@ -39,12 +37,10 @@ exports.createRecord = async (req, res, next) => {
   }
 };
 
-// ─── Get All Records with Filtering & Pagination (All roles) ──────────────────
-
+//Get All Records with Filtering & Pagination (All roles)
 exports.getRecords = async (req, res, next) => {
   try {
     const { type, category, startDate, endDate, page = 1, limit = 10, search } = req.query;
-
     const query = { isDeleted: false };
 
     if (type) {
@@ -70,7 +66,7 @@ exports.getRecords = async (req, res, next) => {
       }
     }
 
-    // Search in description or category
+    //Search in description or category
     if (search) {
       query.$or = [
         { category: { $regex: search, $options: 'i' } },
@@ -98,8 +94,7 @@ exports.getRecords = async (req, res, next) => {
   }
 };
 
-// ─── Get Single Record (All roles) ───────────────────────────────────────────
-
+//Get Single Record (All roles)
 exports.getRecordById = async (req, res, next) => {
   try {
     const record = await Record.findOne({ _id: req.params.id, isDeleted: false });
@@ -110,8 +105,7 @@ exports.getRecordById = async (req, res, next) => {
   }
 };
 
-// ─── Update Record (Admin only) ───────────────────────────────────────────────
-
+//Update Record(Admin only)
 exports.updateRecord = async (req, res, next) => {
   try {
     const parsed = updateRecordSchema.safeParse(req.body);
@@ -136,8 +130,7 @@ exports.updateRecord = async (req, res, next) => {
   }
 };
 
-// ─── Soft Delete Record (Admin only) ─────────────────────────────────────────
-
+//Soft Delete Record(Admin only)
 exports.deleteRecord = async (req, res, next) => {
   try {
     const record = await Record.findOneAndUpdate(

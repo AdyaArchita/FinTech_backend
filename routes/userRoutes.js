@@ -9,21 +9,14 @@ const {
 } = require('../controllers/userController');
 const { authenticate, authorize } = require('../middleware/auth');
 
-// All user management routes require Admin role
+router.get('/', authenticate, authorize(['Admin']), getAllUsers);  //GET /api/users — list all users (with optional filters: role, status, page, limit)
 
-// GET  /api/users          — list all users (with optional filters: role, status, page, limit)
-router.get('/', authenticate, authorize(['Admin']), getAllUsers);
+router.get('/:id', authenticate, authorize(['Admin']), getUserById);  //GET /api/users/:id — get a specific user
 
-// GET  /api/users/:id      — get a specific user
-router.get('/:id', authenticate, authorize(['Admin']), getUserById);
+router.patch('/:id/role', authenticate, authorize(['Admin']), updateUserRole);  //PATCH /api/users/:id/role — update a user's role
 
-// PATCH /api/users/:id/role   — update a user's role
-router.patch('/:id/role', authenticate, authorize(['Admin']), updateUserRole);
+router.patch('/:id/status', authenticate, authorize(['Admin']), updateUserStatus);  //PATCH /api/users/:id/status — activate or deactivate a user
 
-// PATCH /api/users/:id/status — activate or deactivate a user
-router.patch('/:id/status', authenticate, authorize(['Admin']), updateUserStatus);
-
-// DELETE /api/users/:id    — permanently delete a user
-router.delete('/:id', authenticate, authorize(['Admin']), deleteUser);
+router.delete('/:id', authenticate, authorize(['Admin']), deleteUser);  //DELETE /api/users/:id — permanently delete a user
 
 module.exports = router;

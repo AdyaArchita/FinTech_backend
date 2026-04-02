@@ -1,12 +1,11 @@
 const Record = require('../models/Record');
 
-// ─── Dashboard Summary (Admin, Analyst, Viewer) ───────────────────────────────
-
+//Dashboard Summary(Admin, Analyst, Viewer)
 exports.getDashboardSummary = async (req, res, next) => {
   try {
     const baseMatch = { isDeleted: false };
 
-    // Total income / expenses / net balance
+    //Income activity
     const [totals, categoryBreakdown, recentActivity] = await Promise.all([
       Record.aggregate([
         { $match: baseMatch },
@@ -33,7 +32,7 @@ exports.getDashboardSummary = async (req, res, next) => {
         },
       ]),
 
-      // Category-wise totals (both income and expense)
+      // Category-wise totals(both income and expense)
       Record.aggregate([
         { $match: baseMatch },
         {
@@ -63,7 +62,7 @@ exports.getDashboardSummary = async (req, res, next) => {
         },
       ]),
 
-      // Recent 5 records (separate lean query — more efficient than $$ROOT in group)
+      // Recent 5 records(separate lean query)
       Record.find(baseMatch)
         .sort({ date: -1 })
         .limit(5)
@@ -82,8 +81,7 @@ exports.getDashboardSummary = async (req, res, next) => {
   }
 };
 
-// ─── Monthly Trends (Admin, Analyst) ─────────────────────────────────────────
-
+//Monthly Trends
 exports.getMonthlyTrends = async (req, res, next) => {
   try {
     // Default: last 12 months
@@ -132,7 +130,7 @@ exports.getMonthlyTrends = async (req, res, next) => {
       { $sort: { year: 1, month: 1 } },
     ]);
 
-    // Normalize into a clean shape: { year, month, income, expenses, net }
+    //Normalize into a clean shape:year, month, income, expenses, net
     const normalized = trends.map((entry) => {
       const income = entry.data.find((d) => d.type === 'Income')?.total || 0;
       const expenses = entry.data.find((d) => d.type === 'Expense')?.total || 0;

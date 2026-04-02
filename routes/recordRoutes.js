@@ -9,19 +9,14 @@ const {
 } = require('../controllers/recordController');
 const { authenticate, authorize } = require('../middleware/auth');
 
-// GET  /api/records         — all roles (supports: type, category, startDate, endDate, search, page, limit)
-router.get('/', authenticate, getRecords);
+router.get('/', authenticate, getRecords);  //GET /api/records — all roles(supports: type, category, startDate, endDate, search, page, limit)
 
-// GET  /api/records/:id     — all roles
-router.get('/:id', authenticate, getRecordById);
+router.get('/:id', authenticate, getRecordById);  //GET /api/records/:id — all roles
 
-// POST /api/records         — Admin only
-router.post('/', authenticate, authorize(['Admin']), createRecord);
+router.post('/', authenticate, authorize(['Admin']), createRecord);  //POST /api/records — Admin only
 
-// PUT  /api/records/:id     — Admin only
-router.put('/:id', authenticate, authorize(['Admin']), updateRecord);
+router.put('/:id', authenticate, authorize(['Admin']), updateRecord);  //PUT /api/records/:id — Admin only
 
-// DELETE /api/records/:id  — Admin only (soft delete)
-router.delete('/:id', authenticate, authorize(['Admin']), deleteRecord);
+router.delete('/:id', authenticate, authorize(['Admin']), deleteRecord);  //DELETE /api/records/:id — Admin only(soft delete)
 
 module.exports = router;

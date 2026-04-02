@@ -7,13 +7,10 @@ const {
 } = require('../controllers/statsController');
 const { authenticate, authorize } = require('../middleware/auth');
 
-// GET /api/stats/summary  — Admin, Analyst, Viewer
-router.get('/summary', authenticate, getDashboardSummary);
+router.get('/summary', authenticate, getDashboardSummary);  //GET /api/stats/summary — Admin, Analyst, Viewer
 
-// GET /api/stats/trends/monthly?months=12  — Admin, Analyst only
-router.get('/trends/monthly', authenticate, authorize(['Admin', 'Analyst']), getMonthlyTrends);
+router.get('/trends/monthly', authenticate, authorize(['Admin', 'Analyst']), getMonthlyTrends);  //GET /api/stats/trends/monthly?months=12 — Admin, Analyst only
 
-// GET /api/stats/trends/weekly?weeks=8     — Admin, Analyst only
-router.get('/trends/weekly', authenticate, authorize(['Admin', 'Analyst']), getWeeklyTrends);
+router.get('/trends/weekly', authenticate, authorize(['Admin', 'Analyst']), getWeeklyTrends);  //GET /api/stats/trends/weekly?weeks=8 — Admin, Analyst only
 
 module.exports = router;

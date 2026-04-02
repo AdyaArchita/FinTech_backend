@@ -3,13 +3,10 @@ const router = express.Router();
 const { register, login, getMe } = require('../controllers/authController');
 const { authenticate } = require('../middleware/auth');
 
-// POST /api/auth/register
-router.post('/register', register);
+router.post('/register', register);  //POST /api/auth/register
 
-// POST /api/auth/login
-router.post('/login', login);
+router.post('/login', login);  //POST /api/auth/login
 
-// GET /api/auth/me  — returns current logged-in user
-router.get('/me', authenticate, getMe);
+router.get('/me', authenticate, getMe);  //GET /api/auth/me — returns current logged-in user
 
 module.exports = router;

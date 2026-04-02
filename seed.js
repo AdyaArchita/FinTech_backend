@@ -11,11 +11,11 @@ const seedData = async () => {
     await mongoose.connect(process.env.MONGO_URI);
     console.log('🌱 Connected to DB for seeding...');
 
-    // Clear existing data
+    //Clear existing data
     await User.deleteMany({});
     await Record.deleteMany({});
 
-    // Create Admin
+    //Admin Creation
     const hashedPassword = await bcrypt.hash('admin123', 12);
     const admin = await User.create({
       name: 'Admin User',
@@ -24,7 +24,7 @@ const seedData = async () => {
       role: 'Admin'
     });
 
-    // Create Sample Records
+    //Sample Records for testing
     await Record.create([
       { amount: 5000, type: 'Income', category: 'Salary', description: 'Monthly Pay', userId: admin._id },
       { amount: 1200, type: 'Expense', category: 'Rent', description: 'Apartment', userId: admin._id },
